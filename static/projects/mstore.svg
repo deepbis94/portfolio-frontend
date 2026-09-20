@@ -1,0 +1,31 @@
+<svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MSTORE storefront mockup">
+        <rect x="0" y="0" width="800" height="440" fill="#141016" />
+        <rect x="0" y="0" width="800" height="52" fill="#1b1720" />
+        <rect x="24" y="18" width="84" height="16" fill="#b9f332" rx="4" />
+        <rect x="560" y="20" width="44" height="10" fill="#4a4350" rx="3" />
+        <rect x="626" y="20" width="44" height="10" fill="#4a4350" rx="3" />
+        <rect x="692" y="20" width="44" height="10" fill="#4a4350" rx="3" />
+        <rect x="0" y="52" width="800" height="118" fill="#1f1a26" />
+        <rect x="32" y="82" width="280" height="18" fill="#cfc8d6" rx="4" />
+        <rect x="32" y="110" width="200" height="13" fill="#6b6370" rx="3" />
+        <rect x="32" y="134" width="118" height="28" fill="#b9f332" rx="14" />
+        <rect x="520" y="66" width="240" height="86" fill="#221d27" rx="10" />
+        <rect x="536" y="82" width="208" height="54" fill="#22303c" rx="6" />
+        <rect x="32" y="196" width="168" height="200" fill="#1b1720" rx="10" />
+        <rect x="44" y="208" width="144" height="110" fill="#3a4010" rx="6" />
+        <rect x="44" y="328" width="84" height="10" fill="#8a827e" rx="3" />
+        <rect x="44" y="352" width="44" height="10" fill="#b9f332" rx="3" />
+        <rect x="218" y="196" width="168" height="200" fill="#1b1720" rx="10" />
+        <rect x="230" y="208" width="144" height="110" fill="#22303c" rx="6" />
+        <rect x="230" y="328" width="84" height="10" fill="#8a827e" rx="3" />
+        <rect x="230" y="352" width="44" height="10" fill="#b9f332" rx="3" />
+        <rect x="404" y="196" width="168" height="200" fill="#1b1720" rx="10" />
+        <rect x="416" y="208" width="144" height="110" fill="#3a4010" rx="6" />
+        <rect x="416" y="328" width="84" height="10" fill="#8a827e" rx="3" />
+        <rect x="416" y="352" width="44" height="10" fill="#b9f332" rx="3" />
+        <rect x="590" y="196" width="168" height="200" fill="#1b1720" rx="10" />
+        <rect x="602" y="208" width="144" height="110" fill="#22303c" rx="6" />
+        <rect x="602" y="328" width="84" height="10" fill="#8a827e" rx="3" />
+        <rect x="602" y="352" width="44" height="10" fill="#b9f332" rx="3" />
+        <text x="52" y="196+230" font-family="monospace" font-size="11" fill="#4a4350">sales entry · billing · payments · reports</text>
+        </svg>

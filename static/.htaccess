@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Admin + project case-study SPA (SvelteKit fallback)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(admin|projects)(/.*)?$ fallback.html [L]
+
+# Other missing paths → prerendered index
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]

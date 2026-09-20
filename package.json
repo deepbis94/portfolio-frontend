@@ -1,0 +1,24 @@
+{
+  "name": "portfolio-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 3000",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "content:sync": "node --experimental-strip-types scripts/dump-portfolio.ts"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.8",
+    "@sveltejs/kit": "^2.20.7",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tailwindcss/vite": "^4.1.4",
+    "svelte": "^5.28.2",
+    "svelte-check": "^4.1.6",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4"
+  }
+}
