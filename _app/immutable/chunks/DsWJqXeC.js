@@ -1,1 +1,0 @@
-import{g as t}from"./CJaHT1zh.js";async function r(){return null}async function i(){var n;return!!((n=await r())!=null&&n.access_token)}async function o(n,a){const{error:s}=await t().auth.signInWithPassword({email:n,password:a});if(s)throw new Error(s.message)}async function c(){}export{c as a,i,o as s};
