@@ -35,7 +35,7 @@
   <Education items={data.education} certifications={data.certifications} languages={data.languages} />
   <Services items={data.services} />
   <WhyMe items={data.why} />
-  <Contact email={data.email} channels={data.channels} />
+  <Contact email={data.email} channels={data.channels} resumePdf={data.resumePdf} name={data.name} />
   <Footer left={data.footerLeft} right={data.footerRight} />
 </main>
 

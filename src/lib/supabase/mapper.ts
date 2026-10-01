@@ -195,6 +195,7 @@ export function fromCloud(
   payload.linkedin = linkedin;
   payload.github = github;
   payload.photo = photo;
+  payload.resumePdf = publicMediaUrl(str(profile.resume_pdf));
   payload.photoAlt = str(extras.photoAlt) || `${name} — ${role}`.trim();
   payload.photoChipOpen = str(profile.availability || extras.photoChipOpen);
   payload.sub = str(profile.tagline);
@@ -274,7 +275,7 @@ export function toProfile(payload: Portfolio, existing: CloudRow): CloudRow {
     github: payload.github,
     github_label: str(existing.github_label) || urlLabel(payload.github),
     photo: toStoredPath(payload.photo || str(existing.photo)),
-    resume_pdf: str(existing.resume_pdf),
+    resume_pdf: toStoredPath(payload.resumePdf),
     availability: payload.photoChipOpen || str(existing.availability),
     tagline: payload.sub,
     summary: payload.aboutLead

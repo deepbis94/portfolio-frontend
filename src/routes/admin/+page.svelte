@@ -12,7 +12,8 @@
     { href: '/admin/education', label: 'Education', body: 'Degrees and certifications' },
     { href: '/admin/services', label: 'Services', body: 'What you offer' },
     { href: '/admin/why', label: 'Why me', body: 'Reasons to hire' },
-    { href: '/admin/contact', label: 'Contact & nav', body: 'Header links and channels' }
+    { href: '/admin/contact', label: 'Contact & nav', body: 'Header links and channels' },
+    { href: '/admin/cv', label: 'CV', body: 'Upload the PDF visitors download' }
   ];
 
   let health = $state({ ok: false, supabase: false });

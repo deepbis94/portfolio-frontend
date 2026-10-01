@@ -3,15 +3,34 @@
   import { reveal } from '$lib/actions/reveal';
   import type { Project } from '$lib/data/content';
 
+  const PAGE_SIZE = 6;
+
   let {
     projects,
     filters
   }: { projects: Project[]; filters: { id: string; label: string }[] } = $props();
 
   let active = $state('all');
+  let requestedPage = $state(1);
   let visible = $derived(
     projects.filter((p) => active === 'all' || p.filters.includes(active))
   );
+  let pageCount = $derived(Math.max(1, Math.ceil(visible.length / PAGE_SIZE)));
+  let page = $derived(Math.min(requestedPage, pageCount));
+  let paged = $derived(visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE));
+  let pages = $derived(Array.from({ length: pageCount }, (_, i) => i + 1));
+
+  function setFilter(id: string) {
+    active = id;
+    requestedPage = 1;
+  }
+
+  function goToPage(next: number) {
+    const clamped = Math.min(pageCount, Math.max(1, next));
+    if (clamped === page) return;
+    requestedPage = clamped;
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   function repoUrl(project: Project) {
     if (project.repoUrl) return project.repoUrl;
@@ -38,14 +57,14 @@
           ? 'border-green bg-green text-ink-dark'
           : 'border-border bg-surface text-ink/80 hover:border-green hover:text-green-bright'}"
         aria-pressed={active === filter.id}
-        onclick={() => (active = filter.id)}
+        onclick={() => setFilter(filter.id)}
       >
         {filter.label}
       </button>
     {/each}
   </div>
   <div class="grid grid-cols-1 gap-[18px] lg:grid-cols-3">
-    {#each visible as project, i (project.id)}
+    {#each paged as project, i (project.id)}
       <article
         use:reveal={i}
         class="group relative flex flex-col gap-3.5 overflow-hidden rounded-[16px] border border-border bg-surface px-[30px] pt-[30px] pb-[26px] transition duration-150 hover:-translate-y-1 hover:border-green-deep"
@@ -97,4 +116,37 @@
       </article>
     {/each}
   </div>
+  {#if pageCount > 1}
+    <nav class="no-print mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Projects pagination">
+      <button
+        type="button"
+        class="rounded-full border border-border bg-surface px-[18px] py-2 font-mono text-xs text-ink/80 transition hover:border-green hover:text-green-bright disabled:pointer-events-none disabled:opacity-40"
+        disabled={page === 1}
+        onclick={() => goToPage(page - 1)}
+      >
+        Previous
+      </button>
+      {#each pages as n}
+        <button
+          type="button"
+          class="min-w-9 rounded-full border px-3 py-2 font-mono text-xs transition {page === n
+            ? 'border-green bg-green text-ink-dark'
+            : 'border-border bg-surface text-ink/80 hover:border-green hover:text-green-bright'}"
+          aria-current={page === n ? 'page' : undefined}
+          aria-label="Page {n}"
+          onclick={() => goToPage(n)}
+        >
+          {n}
+        </button>
+      {/each}
+      <button
+        type="button"
+        class="rounded-full border border-border bg-surface px-[18px] py-2 font-mono text-xs text-ink/80 transition hover:border-green hover:text-green-bright disabled:pointer-events-none disabled:opacity-40"
+        disabled={page === pageCount}
+        onclick={() => goToPage(page + 1)}
+      >
+        Next
+      </button>
+    </nav>
+  {/if}
 </section>

@@ -84,6 +84,7 @@ export type Portfolio = {
   services: Service[];
   why: WhyItem[];
   channels: Channel[];
+  resumePdf: string;
 };
 
 export const portfolio: Portfolio = {
@@ -373,7 +374,8 @@ export const portfolio: Portfolio = {
     },
     { label: 'GitHub', value: 'github.com/deepbiswaslabs', href: 'https://github.com/deepbiswaslabs' },
     { label: 'Phone', value: '+91 84201 05680', href: 'tel:+918420105680' }
-  ]
+  ],
+  resumePdf: ''
 };
 
 export function withDefaults(input: Partial<Portfolio> & Record<string, unknown> = {}): Portfolio {
@@ -417,6 +419,7 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
     services: Array.isArray(rest.services) ? (rest.services as Portfolio['services']) : portfolio.services,
     why: Array.isArray(rest.why) ? (rest.why as Portfolio['why']) : portfolio.why,
     channels: Array.isArray(rest.channels) ? (rest.channels as Portfolio['channels']) : portfolio.channels,
+    resumePdf: typeof rest.resumePdf === 'string' ? rest.resumePdf : portfolio.resumePdf,
     typePhrases: Array.isArray(rest.typePhrases) ? (rest.typePhrases as string[]) : portfolio.typePhrases,
     chipSkills: Array.isArray(rest.chipSkills) ? (rest.chipSkills as string[]) : portfolio.chipSkills
   };

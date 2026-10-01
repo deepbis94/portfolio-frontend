@@ -16,7 +16,8 @@
     { href: '/admin/education', label: 'Education' },
     { href: '/admin/services', label: 'Services' },
     { href: '/admin/why', label: 'Why me' },
-    { href: '/admin/contact', label: 'Contact' }
+    { href: '/admin/contact', label: 'Contact' },
+    { href: '/admin/cv', label: 'CV' }
   ];
 
   const isLogin = $derived(page.url.pathname === '/admin/login');

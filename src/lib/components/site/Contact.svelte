@@ -1,10 +1,27 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { reveal } from '$lib/actions/reveal';
   import Button from '$lib/components/ui/Button.svelte';
   import type { Channel } from '$lib/data/content';
+  import { isSupabaseConfigured } from '$lib/supabase/client';
+  import { fetchResumePdf } from '$lib/supabase/storage';
 
-  let { email, channels }: { email: string; channels: Channel[] } = $props();
+  let { email, channels, resumePdf = '', name = 'CV' }: { email: string; channels: Channel[]; resumePdf?: string; name?: string } =
+    $props();
   let copyLabel = $state('Copy email address');
+  let cvHref = $state('');
+  let downloading = $state(false);
+
+  $effect(() => {
+    cvHref = resumePdf;
+  });
+
+  onMount(() => {
+    if (!isSupabaseConfigured()) return;
+    fetchResumePdf()
+      .then((url) => (cvHref = url))
+      .catch(() => {});
+  });
 
   async function copyMail() {
     try {
@@ -14,6 +31,38 @@
       copyLabel = email;
     }
     setTimeout(() => (copyLabel = 'Copy email address'), 1800);
+  }
+
+  function fileName() {
+    const slug = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return `${slug || 'cv'}-cv.pdf`;
+  }
+
+  async function downloadCv() {
+    if (!cvHref || downloading) return;
+    downloading = true;
+    try {
+      const url = `${cvHref}${cvHref.includes('?') ? '&' : '?'}t=${Date.now()}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Download failed');
+      const blob = await res.blob();
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = fileName();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(href);
+    } catch {
+      window.open(cvHref, '_blank', 'noopener');
+    } finally {
+      downloading = false;
+    }
   }
 </script>
 
@@ -41,7 +90,9 @@
     </div>
     <div class="no-print mt-6 flex flex-wrap justify-center gap-3">
       <Button ghost onclick={copyMail} type="button">{copyLabel}</Button>
-      <Button ghost onclick={() => window.print()} type="button">Download CV (PDF)</Button>
+      {#if cvHref}
+        <Button ghost onclick={downloadCv} type="button">{downloading ? 'Downloading…' : 'Download CV (PDF)'}</Button>
+      {/if}
     </div>
   </div>
 </section>

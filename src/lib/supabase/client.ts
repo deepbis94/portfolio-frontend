@@ -45,8 +45,9 @@ export function getSupabase(customFetch?: KitFetch): SupabaseClient {
 }
 
 export function publicMediaUrl(path: string): string {
-  if (path === '' || /^https?:\/\//i.test(path)) return path;
-  const normalized = '/' + path.replace(/^\/+/, '');
+  const cleaned = path.split('#')[0].split('?')[0];
+  if (cleaned === '' || /^https?:\/\//i.test(cleaned)) return cleaned;
+  const normalized = '/' + cleaned.replace(/^\/+/, '');
   if (normalized.startsWith('/projects/') || normalized.startsWith('/profile/')) {
     const encoded = normalized
       .slice(1)
@@ -59,10 +60,11 @@ export function publicMediaUrl(path: string): string {
 }
 
 export function toStoredPath(path: string): string {
-  if (path === '') return path;
+  const cleaned = path.split('#')[0].split('?')[0];
+  if (cleaned === '') return cleaned;
   const prefix = `${url}/storage/v1/object/public/${storageBucket()}/`;
-  if (path.startsWith(prefix)) {
-    return '/' + decodeURIComponent(path.slice(prefix.length)).replace(/^\/+/, '');
+  if (cleaned.startsWith(prefix)) {
+    return '/' + decodeURIComponent(cleaned.slice(prefix.length)).replace(/^\/+/, '');
   }
-  return path;
+  return cleaned;
 }
