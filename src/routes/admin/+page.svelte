@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { getHealth, getPortfolio } from '$lib/api';
   import type { Portfolio } from '$lib/data/content';
 
@@ -17,7 +18,7 @@
   let health = $state({ ok: false, supabase: false });
   let data = $state<Portfolio | null>(null);
 
-  $effect(() => {
+  onMount(() => {
     getHealth().then((h) => (health = h));
     getPortfolio().then((p) => (data = p));
   });
@@ -28,18 +29,18 @@
   Every block on the public page is edited here. Identity, experience and
   projects save to Supabase (<span class="font-mono text-green">profile</span>,
   <span class="font-mono text-green">experiences</span>,
-  <span class="font-mono text-green">projects</span>). Other sections stay in
-  the extras overlay. The live site loads that payload.
+  <span class="font-mono text-green">projects</span>). Other sections live in
+  <span class="font-mono text-green">site_content</span>. The live site reads those tables directly.
 </p>
 
 <div class="mt-8 grid gap-4 sm:grid-cols-3">
   <div class="rounded-2xl border border-border bg-surface p-5">
-    <p class="font-mono text-xs text-green uppercase">API</p>
-    <p class="mt-2 text-lg font-bold">{health.ok ? 'Online' : 'Offline'}</p>
+    <p class="font-mono text-xs text-green uppercase">Supabase</p>
+    <p class="mt-2 text-lg font-bold">{health.supabase ? 'Connected' : 'Unreachable'}</p>
   </div>
   <div class="rounded-2xl border border-border bg-surface p-5">
-    <p class="font-mono text-xs text-green uppercase">Supabase</p>
-    <p class="mt-2 text-lg font-bold">{health.supabase ? 'Connected' : 'File only'}</p>
+    <p class="font-mono text-xs text-green uppercase">Auth</p>
+    <p class="mt-2 text-lg font-bold">{health.ok ? 'Ready' : 'Check keys'}</p>
   </div>
   <div class="rounded-2xl border border-border bg-surface p-5">
     <p class="font-mono text-xs text-green uppercase">Projects</p>

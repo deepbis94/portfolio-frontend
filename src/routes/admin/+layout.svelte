@@ -1,7 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import { getToken, clearToken } from '$lib/admin/session';
+  import { isSignedIn, signOut } from '$lib/admin/session';
 
   let { children }: { children: import('svelte').Snippet } = $props();
 
@@ -22,12 +23,14 @@
   const path = $derived(page.url.pathname);
 
   $effect(() => {
-    if (isLogin) return;
-    if (!getToken()) goto('/admin/login');
+    if (!browser || isLogin) return;
+    isSignedIn().then((ok) => {
+      if (!ok) goto('/admin/login');
+    });
   });
 
-  function logout() {
-    clearToken();
+  async function logout() {
+    await signOut();
     goto('/admin/login');
   }
 </script>

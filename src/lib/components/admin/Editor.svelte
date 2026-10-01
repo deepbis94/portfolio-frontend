@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { getPortfolio, savePortfolio } from '$lib/api';
-  import { getToken } from '$lib/admin/session';
+  import { isSignedIn } from '$lib/admin/session';
   import type { Portfolio } from '$lib/data/content';
 
   let {
@@ -18,18 +19,21 @@
   let error = $state('');
   let saving = $state(false);
 
-  $effect(() => {
+  onMount(() => {
     getPortfolio().then((p) => (draft = p));
   });
 
   async function save() {
-    const token = getToken();
-    if (!token || !draft) return;
+    if (!draft) return;
+    if (!(await isSignedIn())) {
+      error = 'Sign in again to save.';
+      return;
+    }
     saving = true;
     status = '';
     error = '';
     try {
-      draft = await savePortfolio(token, draft);
+      draft = await savePortfolio(draft);
       status = 'Saved. Open the public site to see it.';
     } catch (e) {
       error = e instanceof Error ? e.message : 'Save failed';

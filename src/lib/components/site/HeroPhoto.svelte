@@ -16,10 +16,11 @@
     yearsLabel?: string;
     location?: string;
   } = $props();
-  let current = $state(reduce ? skills.slice(0, 2).join(' · ') : skills[0]);
+  let current = $state('');
   let swapping = $state(false);
 
   $effect(() => {
+    current = reduce ? skills.slice(0, 2).join(' · ') : (skills[0] ?? '');
     if (reduce || skills.length === 0) return;
     let i = 0;
     const id = setInterval(() => {

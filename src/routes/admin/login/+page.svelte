@@ -1,16 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { getHealth, postJson } from '$lib/api';
-  import { setToken } from '$lib/admin/session';
+  import { onMount } from 'svelte';
+  import { getHealth } from '$lib/api';
+  import { signIn } from '$lib/admin/session';
 
   let email = $state('');
   let password = $state('');
   let error = $state('');
   let busy = $state(false);
-  let apiOk = $state<boolean | null>(null);
+  let supabaseOk = $state<boolean | null>(null);
 
-  $effect(() => {
-    getHealth().then((h) => (apiOk = h.ok));
+  onMount(() => {
+    getHealth().then((h) => (supabaseOk = h.supabase));
   });
 
   async function submit(e: Event) {
@@ -18,11 +19,10 @@
     error = '';
     busy = true;
     try {
-      const res = await postJson<{ token: string }>('/admin/login', { email, password });
-      setToken(res.token);
+      await signIn(email, password);
       await goto('/admin');
     } catch (err) {
-      error = err instanceof Error ? err.message : 'Login failed. Check API URL and credentials.';
+      error = err instanceof Error ? err.message : 'Login failed. Check Supabase Auth credentials.';
     } finally {
       busy = false;
     }
@@ -31,13 +31,13 @@
 
 <div class="flex min-h-screen items-center justify-center bg-bg px-4">
   <form class="w-full max-w-md rounded-2xl border border-border bg-surface p-8" onsubmit={submit}>
-    <p class="font-mono text-xs tracking-[2px] text-green uppercase">Backend UI</p>
+    <p class="font-mono text-xs tracking-[2px] text-green uppercase">Admin</p>
     <h1 class="mt-2 text-2xl font-extrabold">Sign in</h1>
     <p class="mt-2 text-sm text-ink/70">
       Sign in with your Supabase Auth email and password.
     </p>
-    <p class="mt-3 font-mono text-xs {apiOk ? 'text-green' : apiOk === false ? 'text-red-400' : 'text-ink/50'}">
-      API {apiOk === null ? 'checking…' : apiOk ? 'reachable' : 'offline — start portfolio-backend'}
+    <p class="mt-3 font-mono text-xs {supabaseOk ? 'text-green' : supabaseOk === false ? 'text-red-400' : 'text-ink/50'}">
+      Supabase {supabaseOk === null ? 'checking…' : supabaseOk ? 'connected' : 'unreachable — check PUBLIC_SUPABASE_*'}
     </p>
     <label class="mt-6 block text-sm font-medium" for="admin-email">Email</label>
     <input

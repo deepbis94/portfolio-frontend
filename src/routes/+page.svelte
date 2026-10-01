@@ -1,14 +1,9 @@
 <script lang="ts">
   import SitePage from '$lib/components/site/SitePage.svelte';
-  import { getPortfolio } from '$lib/api';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
-  let live = $state(data.portfolio);
-
-  $effect(() => {
-    getPortfolio().then((p) => (live = p));
-  });
+  let live = $derived(data.portfolio);
 </script>
 
 <svelte:head>

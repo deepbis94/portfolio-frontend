@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPortfolio, getProject } from '$lib/api';
+  import { navigating } from '$app/state';
   import BackToTop from '$lib/components/site/BackToTop.svelte';
   import Footer from '$lib/components/site/Footer.svelte';
   import Nav from '$lib/components/site/Nav.svelte';
@@ -7,46 +7,12 @@
   import ProjectCaseStudy from '$lib/components/site/ProjectCaseStudy.svelte';
   import ProjectLoader from '$lib/components/site/ProjectLoader.svelte';
   import Button from '$lib/components/ui/Button.svelte';
-  import { portfolio, type Portfolio, type ProjectDetail } from '$lib/data/content';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
-
-  let chrome = $state<Portfolio>(portfolio);
-  let project = $state<ProjectDetail | null>(null);
-  let missing = $state(false);
-  let loading = $state(true);
-
-  $effect(() => {
-    const slug = data.slug;
-    let cancelled = false;
-    loading = true;
-    missing = false;
-    project = null;
-
-    Promise.all([getPortfolio(), getProject(slug)])
-      .then(([site, row]) => {
-        if (cancelled) return;
-        chrome = site;
-        project = row;
-        missing = false;
-      })
-      .catch(() => {
-        if (cancelled) return;
-        project = null;
-        missing = true;
-        getPortfolio().then((site) => {
-          if (!cancelled) chrome = site;
-        });
-      })
-      .finally(() => {
-        if (!cancelled) loading = false;
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  });
+  let chrome = $derived(data.chrome);
+  let project = $derived(data.project);
+  let loading = $derived(Boolean(navigating?.to?.params?.slug));
 </script>
 
 <svelte:head>
@@ -63,7 +29,7 @@
 <main class="wrap py-[72px]" id="main">
   {#if loading}
     <ProjectLoader />
-  {:else if missing || !project}
+  {:else if !project}
     <div class="mx-auto max-w-xl py-20 text-center">
       <p class="font-mono text-xs tracking-[2px] text-green uppercase">404</p>
       <h1 class="mt-3 text-3xl font-extrabold">Project not found</h1>

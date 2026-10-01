@@ -1,9 +1,13 @@
 <script lang="ts">
   let { phrases, reduce = false }: { phrases: string[]; reduce?: boolean } = $props();
-  let text = $state(reduce ? phrases.join('   ·   ') : '');
+  let text = $state('');
 
   $effect(() => {
-    if (reduce) return;
+    if (reduce) {
+      text = phrases.join('   ·   ');
+      return;
+    }
+    text = '';
     let pi = 0;
     let ci = 0;
     let deleting = false;
