@@ -6,8 +6,7 @@ export const CANONICAL_TITLE = 'Senior Full-Stack Engineer';
 
 export const skillGroupLabels: { id: SkillGroup; label: string }[] = [
   { id: 'core', label: 'Core' },
-  { id: 'strong', label: 'Strong' },
-  { id: 'working', label: 'Working knowledge' }
+  { id: 'strong', label: 'Strong' }
 ];
 
 export function unifyTitleCopy(text: string): string {
@@ -37,12 +36,12 @@ export function normalizeWhen(when: string, currentFlag = false): { when: string
 export function inferSkillGroup(title: string): SkillGroup {
   const t = title.toLowerCase();
   if (/php|laravel|mysql|redis|docker|ci\/cd|rest api/.test(t)) return 'core';
-  if (/vue|react|next|typescript|gcp/.test(t) && !/aws/.test(t)) return 'working';
   return 'strong';
 }
 
 export function withSkillGroup<T extends { title: string; group?: SkillGroup }>(skill: T): T & { group: SkillGroup } {
-  return { ...skill, group: skill.group ?? inferSkillGroup(skill.title) };
+  const group = skill.group === 'working' ? 'strong' : (skill.group ?? inferSkillGroup(skill.title));
+  return { ...skill, group };
 }
 
 export function legacyPills(pills: StatPill[]): boolean {

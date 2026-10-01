@@ -226,25 +226,25 @@ export const portfolio: Portfolio = {
       title: 'Vue.js',
       body: 'SPAs that pair cleanly with my APIs — TypeScript, Pinia, Vite.',
       icon: 'window',
-      group: 'working'
+      group: 'strong'
     },
     {
       title: 'React / Next.js',
       body: 'Component UIs and App Router frontends when the product needs them.',
       icon: 'window',
-      group: 'working'
+      group: 'strong'
     },
     {
       title: 'TypeScript',
       body: 'Typed frontends and Node services so contracts stay honest.',
       icon: 'code',
-      group: 'working'
+      group: 'strong'
     },
     {
       title: 'GCP',
       body: 'Cloud Run and Compute Engine alongside AWS when the workload lives there.',
       icon: 'cloud',
-      group: 'working'
+      group: 'strong'
     }
   ],
   process: defaultProcess,

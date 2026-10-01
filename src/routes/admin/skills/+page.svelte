@@ -5,7 +5,7 @@
   import { skillGroupLabels } from '$lib/data/proof';
 </script>
 
-<Editor title="Skills" hint="Toolbox cards, grouped as Core / Strong / Working knowledge.">
+<Editor title="Skills" hint="Toolbox cards, grouped as Core / Strong.">
   {#snippet children(draft)}
     <div class="mb-3 flex justify-end">
       <button
