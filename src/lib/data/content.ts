@@ -12,6 +12,7 @@ export type Project = {
   repoUrl: string;
   liveUrl: string;
   media: string;
+  gallery: string[];
   filters: string[];
 };
 export type ProjectMetric = { label: string; value: string };
@@ -197,6 +198,7 @@ export const portfolio: Portfolio = {
       repoUrl: 'https://github.com/deepbiswaslabs/mstore-api',
       liveUrl: '',
       media: '/projects/mstore-api.svg',
+      gallery: [],
       filters: ['laravel', 'mysql', 'docker']
     },
     {
@@ -211,6 +213,7 @@ export const portfolio: Portfolio = {
       repoUrl: 'https://github.com/deepbiswaslabs/mstore',
       liveUrl: '',
       media: '/projects/mstore.svg',
+      gallery: [],
       filters: ['vue']
     },
     {
@@ -225,6 +228,7 @@ export const portfolio: Portfolio = {
       repoUrl: 'https://github.com/deepbiswaslabs/ainvent',
       liveUrl: '',
       media: '/projects/ainvent.svg',
+      gallery: [],
       filters: ['laravel', 'mysql']
     },
     {
@@ -239,6 +243,7 @@ export const portfolio: Portfolio = {
       repoUrl: 'https://github.com/deepbiswaslabs',
       liveUrl: '',
       media: '/projects/checkout-crm.svg',
+      gallery: [],
       filters: ['laravel', 'mysql', 'docker']
     }
   ],
@@ -396,7 +401,8 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
           facts: project.facts ?? [],
           filters: project.filters ?? [],
           repoUrl: project.repoUrl ?? '',
-          liveUrl: project.liveUrl ?? ''
+          liveUrl: project.liveUrl ?? '',
+          gallery: Array.isArray(project.gallery) ? project.gallery : []
         }))
       : portfolio.projects,
     experience: Array.isArray(rest.experience)

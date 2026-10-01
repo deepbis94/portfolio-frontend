@@ -1,5 +1,6 @@
 import type { Portfolio, ProjectDetail } from '$lib/data/content';
 import { getSupabase, isSupabaseConfigured, type KitFetch } from './client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   extrasFrom,
   fromCloud,
@@ -14,14 +15,14 @@ function fail(table: string, message: string | null): never {
   throw new Error(message || `Supabase ${table} request failed`);
 }
 
-async function fetchProfile(fetchImpl?: KitFetch): Promise<CloudRow | null> {
-  const { data, error } = await getSupabase(fetchImpl).from('profile').select('*').eq('id', 1).maybeSingle();
+async function fetchProfile(sb: SupabaseClient): Promise<CloudRow | null> {
+  const { data, error } = await sb.from('profile').select('*').eq('id', 1).maybeSingle();
   if (error) fail('profile', error.message);
   return data as CloudRow | null;
 }
 
-async function fetchExperiences(fetchImpl?: KitFetch): Promise<CloudRow[]> {
-  const { data, error } = await getSupabase(fetchImpl)
+async function fetchExperiences(sb: SupabaseClient): Promise<CloudRow[]> {
+  const { data, error } = await sb
     .from('experiences')
     .select('*')
     .order('sort_order', { ascending: true })
@@ -30,8 +31,8 @@ async function fetchExperiences(fetchImpl?: KitFetch): Promise<CloudRow[]> {
   return (data ?? []) as CloudRow[];
 }
 
-async function fetchProjects(fetchImpl?: KitFetch): Promise<CloudRow[]> {
-  const { data, error } = await getSupabase(fetchImpl)
+async function fetchProjects(sb: SupabaseClient): Promise<CloudRow[]> {
+  const { data, error } = await sb
     .from('projects')
     .select('*')
     .order('sort_order', { ascending: true })
@@ -40,12 +41,8 @@ async function fetchProjects(fetchImpl?: KitFetch): Promise<CloudRow[]> {
   return (data ?? []) as CloudRow[];
 }
 
-async function fetchSiteContent(fetchImpl?: KitFetch): Promise<CloudRow> {
-  const { data, error } = await getSupabase(fetchImpl)
-    .from('site_content')
-    .select('payload')
-    .eq('id', 1)
-    .maybeSingle();
+async function fetchSiteContent(sb: SupabaseClient): Promise<CloudRow> {
+  const { data, error } = await sb.from('site_content').select('payload').eq('id', 1).maybeSingle();
   if (error) {
     if (error.code === 'PGRST205' || error.code === '42P01') return {};
     fail('site_content', error.message);
@@ -61,14 +58,10 @@ export async function pingSupabase(fetchImpl?: KitFetch): Promise<boolean> {
 }
 
 export async function fetchPortfolio(fetchImpl?: KitFetch): Promise<Record<string, unknown>> {
-  const profile = await fetchProfile(fetchImpl);
+  const sb = getSupabase(fetchImpl);
+  const profile = await fetchProfile(sb);
   if (!profile) throw new Error('No profile row in Supabase');
-  return fromCloud(
-    profile,
-    await fetchExperiences(fetchImpl),
-    await fetchProjects(fetchImpl),
-    await fetchSiteContent(fetchImpl)
-  );
+  return fromCloud(profile, await fetchExperiences(sb), await fetchProjects(sb), await fetchSiteContent(sb));
 }
 
 export async function fetchProject(slug: string, fetchImpl?: KitFetch): Promise<ProjectDetail> {
@@ -81,13 +74,14 @@ export async function fetchProject(slug: string, fetchImpl?: KitFetch): Promise<
 }
 
 async function upsertProfile(row: CloudRow): Promise<void> {
-  const existing = await fetchProfile();
+  const sb = getSupabase();
+  const existing = await fetchProfile(sb);
   if (existing) {
-    const { error } = await getSupabase().from('profile').update(row).eq('id', 1);
+    const { error } = await sb.from('profile').update(row).eq('id', 1);
     if (error) fail('profile', error.message);
     return;
   }
-  const { error } = await getSupabase().from('profile').insert({ ...row, id: 1 });
+  const { error } = await sb.from('profile').insert({ ...row, id: 1 });
   if (error) fail('profile', error.message);
 }
 
@@ -147,10 +141,11 @@ async function saveSiteContent(payload: CloudRow): Promise<void> {
 }
 
 export async function savePortfolioToCloud(payload: Portfolio): Promise<Record<string, unknown>> {
+  const sb = getSupabase();
   const extras = extrasFrom(payload);
-  const profile = (await fetchProfile()) ?? {};
-  const experiences = await fetchExperiences();
-  const projects = await fetchProjects();
+  const profile = (await fetchProfile(sb)) ?? {};
+  const experiences = await fetchExperiences(sb);
+  const projects = await fetchProjects(sb);
   await upsertProfile(toProfile(payload, profile));
   await replaceExperiences(toExperiences(payload), experiences);
   await replaceProjects(toProjects(payload, projects), projects);

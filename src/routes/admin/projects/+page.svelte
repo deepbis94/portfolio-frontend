@@ -2,9 +2,10 @@
   import Editor from '$lib/components/admin/Editor.svelte';
   import Field from '$lib/components/admin/Field.svelte';
   import CsvField from '$lib/components/admin/CsvField.svelte';
+  import LinesField from '$lib/components/admin/LinesField.svelte';
 </script>
 
-<Editor title="Projects" hint="Cards and filter chips. Media can be /projects/name.svg or any image URL.">
+<Editor title="Projects" hint="Card image is Media URL. Extra case-study photos go in Gallery — one URL per line.">
   {#snippet children(draft)}
     <div class="mb-6 max-w-3xl">
       <h3 class="mb-3 text-sm font-bold">Filters</h3>
@@ -47,6 +48,7 @@
               repoUrl: '',
               liveUrl: '',
               media: '',
+              gallery: [],
               filters: []
             }
           ])}
@@ -65,7 +67,18 @@
           <div class="md:col-span-2">
             <Field label="Summary" bind:value={project.summary} rows={3} />
           </div>
-          <Field label="Media URL" bind:value={project.media} />
+          <Field
+            label="Media URL"
+            bind:value={project.media}
+            hint="Card + cover. /projects/name.jpg uses the portfolio storage bucket, or paste a full https URL"
+          />
+          <div class="md:col-span-2">
+            <LinesField
+              label="Gallery URLs"
+              bind:value={project.gallery}
+              hint="One image URL per line. Shown on the case-study page. Same path rules as Media URL."
+            />
+          </div>
           <CsvField label="Filter IDs" bind:value={project.filters} hint="Must match filter IDs above" />
           <CsvField label="Tags" bind:value={project.tags} />
           <CsvField label="Facts" bind:value={project.facts} />

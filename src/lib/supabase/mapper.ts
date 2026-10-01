@@ -180,6 +180,7 @@ export function fromCloud(
       repoUrl: repo,
       liveUrl: live,
       media: publicMediaUrl(str(row.image)),
+      gallery: stringList(row.gallery).map(publicMediaUrl),
       filters
     });
   }
@@ -312,6 +313,7 @@ export function toProjects(payload: Portfolio, existing: CloudRow[]): CloudRow[]
     const href = project.repoUrl.trim();
     const live = project.liveUrl.trim();
     const image = toStoredPath(project.media || str(current.image));
+    const gallery = stringList(project.gallery).map(toStoredPath).filter(Boolean);
     return {
       slug,
       name: project.title,
@@ -328,7 +330,7 @@ export function toProjects(payload: Portfolio, existing: CloudRow[]): CloudRow[]
       url: href || str(current.url),
       live_url: live || current.live_url || null,
       image: image || str(current.image),
-      gallery: current.gallery ?? null,
+      gallery,
       sort_order: i
     };
   });

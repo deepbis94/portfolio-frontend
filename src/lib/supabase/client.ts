@@ -21,9 +21,10 @@ function createClientWith(customFetch?: KitFetch): SupabaseClient {
   return createClient(url, anon, {
     ...(customFetch ? { global: { fetch: customFetch } } : {}),
     auth: {
-      persistSession: browser && !customFetch,
-      autoRefreshToken: browser && !customFetch,
-      detectSessionInUrl: browser && !customFetch
+      persistSession: browser,
+      autoRefreshToken: browser,
+      detectSessionInUrl: browser,
+      storageKey: 'portfolio-auth'
     }
   });
 }
@@ -36,9 +37,11 @@ export function getSupabase(customFetch?: KitFetch): SupabaseClient {
   if (!isSupabaseConfigured()) {
     throw new Error('PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY are not set');
   }
-  if (customFetch) return createClientWith(customFetch);
-  if (!client) client = createClientWith();
-  return client;
+  if (typeof window !== 'undefined') {
+    if (!client) client = createClientWith();
+    return client;
+  }
+  return createClientWith(customFetch);
 }
 
 export function publicMediaUrl(path: string): string {
