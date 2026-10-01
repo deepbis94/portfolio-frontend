@@ -2,7 +2,7 @@
   import { page } from '$app/state';
   import type { NavLink } from '$lib/data/content';
 
-  let { name, links }: { name: string; links: NavLink[] } = $props();
+  let { name, links, hireHref = '#contact' }: { name: string; links: NavLink[]; hireHref?: string } = $props();
 
   let open = $state(false);
   let active = $state('');
@@ -61,10 +61,10 @@
         </a>
       {/each}
       <a
-        href={hrefFor('#contact')}
-        class="ml-1 rounded-full bg-green px-5 py-2 text-[13px] font-bold text-ink-dark hover:bg-green-bright hover:text-ink-dark"
+        href={hrefFor(hireHref)}
+        class="ml-1 inline-flex min-h-11 items-center rounded-full bg-green px-5 py-2 text-[13px] font-bold text-ink-dark hover:bg-green-bright hover:text-ink-dark"
       >
-        Let's Talk
+        Hire me
       </a>
     </div>
     <button
@@ -89,11 +89,11 @@
         </a>
       {/each}
       <a
-        href={hrefFor('#contact')}
+        href={hrefFor(hireHref)}
         onclick={close}
-        class="block px-7 py-[15px] text-[15px] font-bold text-green hover:bg-green-dim"
+        class="block min-h-11 px-7 py-[15px] text-[15px] font-bold text-green hover:bg-green-dim"
       >
-        Let's Talk
+        Hire me
       </a>
     </div>
   {/if}

@@ -3,8 +3,38 @@
   import Field from '$lib/components/admin/Field.svelte';
 </script>
 
-<Editor title="Why me" hint="Numbered reasons.">
+<Editor title="Why me" hint="How I work steps, then numbered reasons.">
   {#snippet children(draft)}
+    <div class="mb-10">
+      <div class="mb-3 flex items-center justify-between">
+        <h3 class="text-sm font-bold">How I work</h3>
+        <button
+          class="text-sm text-green"
+          type="button"
+          onclick={() =>
+            (draft.process = [
+              ...draft.process,
+              { n: String(draft.process.length + 1).padStart(2, '0'), title: '', body: '' }
+            ])}
+        >
+          Add step
+        </button>
+      </div>
+      <div class="grid gap-4">
+        {#each draft.process as step, i}
+          <article class="grid gap-3 rounded-2xl border border-border bg-surface p-4 md:grid-cols-[80px_1fr]">
+            <Field label="No." bind:value={step.n} />
+            <Field label="Title" bind:value={step.title} />
+            <div class="md:col-span-2">
+              <Field label="Body" bind:value={step.body} rows={3} />
+            </div>
+            <button class="text-sm text-red-400" type="button" onclick={() => (draft.process = draft.process.filter((_, j) => j !== i))}
+              >Remove</button
+            >
+          </article>
+        {/each}
+      </div>
+    </div>
     <div class="mb-3 flex justify-end">
       <button
         class="text-sm text-green"

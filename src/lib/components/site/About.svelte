@@ -2,11 +2,11 @@
   import SectionHead from '$lib/components/ui/SectionHead.svelte';
   import { reveal } from '$lib/actions/reveal';
 
-  let { lead, points }: { lead: string; points: string[] } = $props();
+  let { lead, points, title }: { lead: string; points: string[]; title: string } = $props();
 </script>
 
 <section class="border-t border-border-soft py-12" id="about">
-  <SectionHead eyebrow="Who I am" title="A backend engineer dedicated to systems that work for your business." />
+  <SectionHead eyebrow="Who I am" {title} />
   <div class="grid items-center gap-9 md:grid-cols-[1.2fr_1fr]">
     <p class="text-[17px] font-medium tracking-[-0.2px]">{lead}</p>
     <ul class="grid gap-2">

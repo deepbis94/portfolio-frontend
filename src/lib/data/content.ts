@@ -1,6 +1,21 @@
+import {
+  CANONICAL_TITLE,
+  defaultAvailability,
+  defaultProcess,
+  defaultStats,
+  factsFor,
+  legacyPills,
+  normalizeWhen,
+  unifyTitleCopy,
+  withSkillGroup,
+  type ProcessStep,
+  type SkillGroup
+} from './proof';
+
 export type NavLink = { href: string; label: string };
 export type Pill = { label: string; accent: string; wide?: boolean };
-export type Skill = { title: string; body: string; icon: string };
+export type Skill = { title: string; body: string; icon: string; group?: SkillGroup };
+export type { ProcessStep, SkillGroup };
 export type Project = {
   id: string;
   title: string;
@@ -72,9 +87,14 @@ export type Portfolio = {
   chipSkills: string[];
   nav: NavLink[];
   pills: Pill[];
+  stats: Pill[];
+  aboutTitle: string;
   aboutLead: string;
   aboutPoints: string[];
+  availabilityLine: string;
+  contactHref: string;
   skills: Skill[];
+  process: ProcessStep[];
   projectFilters: { id: string; label: string }[];
   projects: Project[];
   experience: Experience[];
@@ -89,7 +109,7 @@ export type Portfolio = {
 
 export const portfolio: Portfolio = {
   name: 'Deep Biswas',
-  role: 'Senior Backend Engineer',
+  role: CANONICAL_TITLE,
   location: 'Kolkata, India',
   email: 'biswasd94@gmail.com',
   phone: '+91 84201 05680',
@@ -97,18 +117,18 @@ export const portfolio: Portfolio = {
   linkedin: 'https://linkedin.com/in/deep-biswas-enthusiast',
   github: 'https://github.com/deepbiswaslabs',
   photo: '/hero.jpg',
-  photoAlt: 'Deep Biswas — Senior Backend Engineer',
-  photoChipOpen: 'Open to work',
-  photoChipYears: '6+ yrs backend',
-  metaTitle: 'Deep Biswas — Senior Backend Engineer',
+  photoAlt: `Deep Biswas — ${CANONICAL_TITLE}`,
+  photoChipOpen: 'Available',
+  photoChipYears: '6+ yrs shipping',
+  metaTitle: `Deep Biswas — ${CANONICAL_TITLE}`,
   metaDescription:
-    'Deep Biswas — Senior Backend Engineer in Kolkata. 6+ years building scalable APIs, eCommerce backends and cloud deployments with PHP, Laravel, Symfony and Node.js.',
-  footerLeft: '© {year} Deep Biswas · Senior Backend Engineer',
+    `Deep Biswas — ${CANONICAL_TITLE} in Kolkata. 6+ years building scalable APIs, eCommerce backends and cloud deployments with PHP, Laravel, Symfony and Node.js.`,
+  footerLeft: `© {year} Deep Biswas · ${CANONICAL_TITLE}`,
   footerRight: 'Reference-based design · emerald green',
   headline: 'Building modern,',
   headlineAccent: 'scalable backend systems',
   headlineSuffix: 'that hold under real traffic.',
-  sub: 'I design and develop APIs, databases and payment pipelines for SaaS, CRM and eCommerce platforms — PHP 8+, Laravel, Symfony and Node.js, deployed on AWS and GCP.',
+  sub: `${CANONICAL_TITLE} with 6+ years building SaaS, CRM, checkout, eCommerce, and AI-powered platforms using Laravel, Node.js, and cloud-native infrastructure.`,
   typePhrases: [
     'PHP 8+ · Laravel',
     'Symfony · Node.js',
@@ -123,62 +143,105 @@ export const portfolio: Portfolio = {
     { href: '#experience', label: 'Experience' },
     { href: '#services', label: 'Services' }
   ],
-  pills: [
-    { accent: '6+', label: 'Years Experience' },
-    { accent: 'SaaS', label: 'CRM & Checkout Systems' },
-    { accent: 'APIs', label: 'Architecture & Integration' },
-    { accent: 'Cloud', label: 'AWS · GCP · Docker' },
-    { label: 'MySQL · Redis · RabbitMQ', wide: true, accent: '' }
-  ],
+  pills: defaultStats,
+  stats: defaultStats,
+  aboutTitle: 'A full-stack engineer dedicated to systems that work for your business.',
   aboutLead:
-    "I'm Deep Biswas — a Senior Backend Engineer with 6+ years building scalable backend systems in PHP, Laravel, Symfony and Node.js.",
+    `I'm Deep Biswas — a ${CANONICAL_TITLE} with 6+ years building scalable systems in PHP, Laravel, Symfony and Node.js.`,
   aboutPoints: [
     'Scalable REST APIs — checkout, orders, CRM, inventory',
     'Payments — Sticky.io, Konnektive, CheckoutChamp',
     'Database & cloud — MySQL, Redis, Docker, AWS & GCP'
   ],
+  availabilityLine: defaultAvailability,
+  contactHref: '#contact',
   skills: [
     {
       title: 'PHP 8+ / Laravel',
       body: 'Core backend — clean architecture, SOLID, queue workers, service layers.',
-      icon: 'code'
+      icon: 'code',
+      group: 'core'
     },
     {
-      title: 'Symfony',
-      body: 'Enterprise apps & legacy-to-modern PHP 8.3 migrations.',
-      icon: 'grid'
+      title: 'REST APIs',
+      body: 'Clear contracts, versioning, and integrations your team can keep shipping against.',
+      icon: 'api',
+      group: 'core'
+    },
+    {
+      title: 'MySQL',
+      body: 'Schema design, indexing, transactions, and query tuning for real traffic.',
+      icon: 'db',
+      group: 'core'
+    },
+    {
+      title: 'Redis',
+      body: 'Caching, sessions, and queues where latency actually matters.',
+      icon: 'gauge',
+      group: 'core'
+    },
+    {
+      title: 'Docker & CI/CD',
+      body: 'Containerized environments and GitHub Actions pipelines.',
+      icon: 'box',
+      group: 'core'
     },
     {
       title: 'Node.js',
       body: 'JavaScript services, APIs and realtime workflows.',
-      icon: 'share'
+      icon: 'share',
+      group: 'strong'
     },
     {
-      title: 'MySQL & Redis',
-      body: 'Schema design, indexing, transactions, caching strategy.',
-      icon: 'db'
+      title: 'Symfony',
+      body: 'Enterprise apps & legacy-to-modern PHP 8.3 migrations.',
+      icon: 'grid',
+      group: 'strong'
+    },
+    {
+      title: 'PostgreSQL / pgvector',
+      body: 'Relational data plus embeddings for search and RAG workloads.',
+      icon: 'db',
+      group: 'strong'
     },
     {
       title: 'RabbitMQ',
       body: 'Message queues and asynchronous job processing.',
-      icon: 'queue'
+      icon: 'queue',
+      group: 'strong'
     },
     {
-      title: 'Cloud — AWS & GCP',
-      body: 'EC2, S3, RDS, Lambda, CloudWatch · Cloud Run, Compute Engine.',
-      icon: 'cloud'
+      title: 'AWS',
+      body: 'EC2, S3, RDS, Lambda, CloudWatch — production deploys that stay boring.',
+      icon: 'cloud',
+      group: 'strong'
     },
     {
-      title: 'Docker & CI/CD',
-      body: 'Containerized environments, GitHub Actions pipelines.',
-      icon: 'box'
+      title: 'Vue.js',
+      body: 'SPAs that pair cleanly with my APIs — TypeScript, Pinia, Vite.',
+      icon: 'window',
+      group: 'working'
     },
     {
-      title: 'Vue.js & React',
-      body: 'Frontends that pair cleanly with my APIs — TypeScript, Next.js, Tailwind.',
-      icon: 'window'
+      title: 'React / Next.js',
+      body: 'Component UIs and App Router frontends when the product needs them.',
+      icon: 'window',
+      group: 'working'
+    },
+    {
+      title: 'TypeScript',
+      body: 'Typed frontends and Node services so contracts stay honest.',
+      icon: 'code',
+      group: 'working'
+    },
+    {
+      title: 'GCP',
+      body: 'Cloud Run and Compute Engine alongside AWS when the workload lives there.',
+      icon: 'cloud',
+      group: 'working'
     }
   ],
+  process: defaultProcess,
   projectFilters: [
     { id: 'all', label: 'All' },
     { id: 'laravel', label: 'Laravel' },
@@ -194,7 +257,7 @@ export const portfolio: Portfolio = {
       summary:
         'RESTful backend for retail operations — customer management, invoicing, inventory, billing and payments, with CSV import/export and PDF invoice generation.',
       tags: ['Laravel 12', 'PHP 8.2+', 'MySQL', 'Docker', 'TCPDF', 'Pest'],
-      facts: ['8 core modules', 'REST API', 'PDF + CSV built in'],
+      facts: ['11+ modules', 'CSV/PDF export', 'Dual-session billing'],
       href: 'https://github.com/deepbiswaslabs/mstore-api',
       repoUrl: 'https://github.com/deepbiswaslabs/mstore-api',
       liveUrl: '',
@@ -251,7 +314,7 @@ export const portfolio: Portfolio = {
   experience: [
     {
       title: 'Senior Engineer, Web',
-      when: 'Jun 2021 — Jun 2026 · Current',
+      when: 'June 2021 – Present',
       org: 'Codeclouds IT Solutions Pvt. Ltd. · Kolkata',
       bullets: [
         'Owned backend delivery for SaaS, CRM and checkout products across eCommerce clients.',
@@ -380,40 +443,68 @@ export const portfolio: Portfolio = {
 
 export function withDefaults(input: Partial<Portfolio> & Record<string, unknown> = {}): Portfolio {
   const { source: _s, error: _e, ...rest } = input;
+  const incomingPills = Array.isArray(rest.pills)
+    ? (rest.pills as Portfolio['pills']).map((p) => ({ ...p, accent: p.accent ?? '', label: p.label ?? '' }))
+    : [];
+  const incomingStats = Array.isArray(rest.stats)
+    ? (rest.stats as Portfolio['stats']).map((p) => ({ ...p, accent: p.accent ?? '', label: p.label ?? '' }))
+    : [];
+  const stats =
+    incomingStats.length > 0 ? incomingStats : incomingPills.length > 0 && !legacyPills(incomingPills) ? incomingPills : defaultStats;
+  const incomingSkills = Array.isArray(rest.skills) ? (rest.skills as Portfolio['skills']) : [];
+  const legacySkillSet = incomingSkills.some((skill) =>
+    /mysql & redis|vue\.js & react|cloud — aws/i.test(skill.title)
+  );
+  const skills = incomingSkills.length > 0 && !legacySkillSet ? incomingSkills.map(withSkillGroup) : portfolio.skills;
+  const experience = (
+    Array.isArray(rest.experience) ? (rest.experience as Portfolio['experience']) : portfolio.experience
+  ).map((job) => {
+    const normalized = normalizeWhen(job.when ?? '', Boolean(job.current));
+    return { ...job, bullets: job.bullets ?? [], when: normalized.when, current: normalized.current };
+  });
+  const projects = (
+    Array.isArray(rest.projects) ? (rest.projects as Portfolio['projects']) : portfolio.projects
+  ).map((project) => ({
+    ...project,
+    tags: project.tags ?? [],
+    facts: factsFor(project.id, project.facts ?? []),
+    filters: project.filters ?? [],
+    repoUrl: project.repoUrl ?? '',
+    liveUrl: project.liveUrl ?? '',
+    gallery: Array.isArray(project.gallery) ? project.gallery : []
+  }));
+  const featured = String(projects.length);
+  const resolvedStats = stats.map((pill) =>
+    /featured projects/i.test(pill.label) ? { ...pill, accent: featured } : pill
+  );
+
   return {
     ...portfolio,
     ...(rest as Partial<Portfolio>),
+    role: unifyTitleCopy((rest.role as string) || portfolio.role),
     photo: (rest.photo as string) || portfolio.photo,
-    photoAlt: (rest.photoAlt as string) || portfolio.photoAlt,
-    metaTitle: (rest.metaTitle as string) || portfolio.metaTitle,
-    metaDescription: (rest.metaDescription as string) || portfolio.metaDescription,
+    photoAlt: unifyTitleCopy((rest.photoAlt as string) || portfolio.photoAlt),
+    metaTitle: unifyTitleCopy((rest.metaTitle as string) || portfolio.metaTitle),
+    metaDescription: unifyTitleCopy((rest.metaDescription as string) || portfolio.metaDescription),
+    footerLeft: unifyTitleCopy((rest.footerLeft as string) || portfolio.footerLeft),
+    sub: unifyTitleCopy((rest.sub as string) || portfolio.sub),
+    aboutTitle: unifyTitleCopy((rest.aboutTitle as string) || portfolio.aboutTitle),
+    aboutLead: unifyTitleCopy((rest.aboutLead as string) || portfolio.aboutLead),
+    availabilityLine: (rest.availabilityLine as string) || defaultAvailability,
+    contactHref: (rest.contactHref as string) || portfolio.contactHref,
     nav: Array.isArray(rest.nav) ? (rest.nav as Portfolio['nav']) : portfolio.nav,
-    pills: Array.isArray(rest.pills)
-      ? (rest.pills as Portfolio['pills']).map((p) => ({ ...p, accent: p.accent ?? '', label: p.label ?? '' }))
-      : portfolio.pills,
+    pills: resolvedStats,
+    stats: resolvedStats,
     aboutPoints: Array.isArray(rest.aboutPoints) ? (rest.aboutPoints as string[]) : portfolio.aboutPoints,
-    skills: Array.isArray(rest.skills) ? (rest.skills as Portfolio['skills']) : portfolio.skills,
+    skills,
+    process: Array.isArray(rest.process) && (rest.process as ProcessStep[]).length > 0
+      ? (rest.process as ProcessStep[])
+      : defaultProcess,
     projectFilters: Array.isArray(rest.projectFilters)
       ? (rest.projectFilters as Portfolio['projectFilters'])
       : portfolio.projectFilters,
-    projects: Array.isArray(rest.projects)
-      ? (rest.projects as Portfolio['projects']).map((project) => ({
-          ...project,
-          tags: project.tags ?? [],
-          facts: project.facts ?? [],
-          filters: project.filters ?? [],
-          repoUrl: project.repoUrl ?? '',
-          liveUrl: project.liveUrl ?? '',
-          gallery: Array.isArray(project.gallery) ? project.gallery : []
-        }))
-      : portfolio.projects,
-    experience: Array.isArray(rest.experience)
-      ? (rest.experience as Portfolio['experience']).map((job) => ({
-          ...job,
-          bullets: job.bullets ?? [],
-          current: Boolean(job.current)
-        }))
-      : portfolio.experience,
+    projects,
+    experience,
     education: Array.isArray(rest.education) ? (rest.education as Portfolio['education']) : portfolio.education,
     certifications: Array.isArray(rest.certifications) ? (rest.certifications as string[]) : portfolio.certifications,
     services: Array.isArray(rest.services) ? (rest.services as Portfolio['services']) : portfolio.services,

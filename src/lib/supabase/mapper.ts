@@ -1,4 +1,5 @@
 import type { Channel, Experience, Portfolio, Project, ProjectDetail } from '$lib/data/content';
+import { normalizeWhen } from '$lib/data/proof';
 import { publicMediaUrl, toStoredPath } from './client';
 
 export const EXTRA_KEYS = [
@@ -24,6 +25,11 @@ export const EXTRA_KEYS = [
   'services',
   'why',
   'channels',
+  'stats',
+  'availabilityLine',
+  'aboutTitle',
+  'process',
+  'contactHref',
   'projectFilterMap'
 ] as const;
 
@@ -100,14 +106,13 @@ function channelsFromProfile(
 }
 
 function mapExperiences(rows: CloudRow[]): Experience[] {
-  return rows.map((row, i) => {
+  return rows.map((row) => {
     const company = str(row.company);
     const location = str(row.location).trim();
-    const period = str(row.period);
-    const current = i === 0 || period.includes('Current') || period.includes('Present');
+    const { when, current } = normalizeWhen(str(row.period));
     return {
       title: str(row.title),
-      when: current && !period.includes('Current') ? `${period} · Current` : period,
+      when,
       org: location ? `${company} · ${location}` : company,
       bullets: stringList(row.bullets),
       current
@@ -288,7 +293,7 @@ export function toProfile(payload: Portfolio, existing: CloudRow): CloudRow {
 export function toExperiences(payload: Portfolio): CloudRow[] {
   return payload.experience.map((job, i) => {
     const [company, location] = splitOrg(job.org);
-    const when = job.when.replace(' · Current', '').trim();
+    const { when } = normalizeWhen(job.when, Boolean(job.current));
     return {
       sort_order: i,
       title: job.title,

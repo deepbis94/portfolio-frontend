@@ -20,6 +20,12 @@
       <Field label="Photo alt text" bind:value={draft.photoAlt} />
       <Field label="Photo chip — availability" bind:value={draft.photoChipOpen} />
       <Field label="Photo chip — experience" bind:value={draft.photoChipYears} />
+      <Field
+        label="Availability line"
+        bind:value={draft.availabilityLine}
+        hint="Shown under the hero and on Hire me bands"
+        rows={2}
+      />
       <Field label="Headline (before accent)" bind:value={draft.headline} />
       <Field label="Headline accent" bind:value={draft.headlineAccent} />
       <Field label="Headline suffix" bind:value={draft.headlineSuffix} />
@@ -33,21 +39,21 @@
 
       <div>
         <div class="mb-2 flex items-center justify-between">
-          <h3 class="text-sm font-bold">Stat pills</h3>
+          <h3 class="text-sm font-bold">Credibility stats</h3>
           <button
             class="text-sm text-green"
             type="button"
-            onclick={() => (draft.pills = [...draft.pills, { accent: '', label: '', wide: false }])}
+            onclick={() => (draft.stats = [...draft.stats, { accent: '', label: '', wide: false }])}
           >
-            Add pill
+            Add stat
           </button>
         </div>
         <div class="grid gap-3">
-          {#each draft.pills as pill, i}
+          {#each draft.stats as pill, i}
             <div class="grid gap-2 rounded-xl border border-border bg-surface p-3 sm:grid-cols-[1fr_2fr_auto]">
               <Field label="Accent" bind:value={pill.accent} />
               <Field label="Label" bind:value={pill.label} />
-              <button class="self-end pb-2 text-sm text-red-400" type="button" onclick={() => (draft.pills = draft.pills.filter((_, j) => j !== i))}
+              <button class="self-end pb-2 text-sm text-red-400" type="button" onclick={() => (draft.stats = draft.stats.filter((_, j) => j !== i))}
                 >Remove</button
               >
             </div>

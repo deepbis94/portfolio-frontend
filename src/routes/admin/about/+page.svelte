@@ -7,6 +7,7 @@
 <Editor title="About" hint="The Who I am section.">
   {#snippet children(draft)}
     <div class="grid max-w-3xl gap-4">
+      <Field label="Section title" bind:value={draft.aboutTitle} />
       <Field label="Lead paragraph" bind:value={draft.aboutLead} rows={4} />
       <LinesField label="Checklist points" bind:value={draft.aboutPoints} hint="One point per line" />
     </div>

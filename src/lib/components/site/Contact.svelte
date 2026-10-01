@@ -89,6 +89,7 @@
       {/each}
     </div>
     <div class="no-print mt-6 flex flex-wrap justify-center gap-3">
+      <Button href={`mailto:${email}?subject=Project%20inquiry`} solid class="min-h-11">Hire me / Start a project</Button>
       <Button ghost onclick={copyMail} type="button">{copyLabel}</Button>
       {#if cvHref}
         <Button ghost onclick={downloadCv} type="button">{downloading ? 'Downloading…' : 'Download CV (PDF)'}</Button>
