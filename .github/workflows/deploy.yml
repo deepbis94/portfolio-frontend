@@ -11,6 +11,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: production
     env:
       PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
       PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
@@ -22,6 +23,13 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+
+      - name: Require public Supabase env
+        run: |
+          if [ -z "$PUBLIC_SUPABASE_URL" ] || [ -z "$PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY on the production environment, then re-run this workflow."
+            exit 1
+          fi
 
       - name: Install
         run: npm ci
