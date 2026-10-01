@@ -26,33 +26,22 @@ npm run dev
 
 Operations use the `production` branch. Keep `main` for development.
 
-## Hostinger auto-deploy (GitHub)
+## Hostinger shared hosting (Git auto-deploy)
 
-Use **Node.js web app → Import Git repository**, not the generic Git file-copy tool. Generic Git only dumps source into a folder and will not run `npm run build`.
+Shared hosting **cannot run npm**. Hostinger Git only copies files into `public_html`. So GitHub Actions builds the site, then Hostinger pulls the built files.
 
-1. hPanel → **Websites → Add Website → Node.js web app → Import Git repository**.
-2. Connect GitHub and select `deepbis94/portfolio-frontend`.
-3. Set:
+1. In GitHub **portfolio-frontend → Settings → Secrets and variables → Actions** add:
 
-| Field | Value |
-|---|---|
-| Branch | `production` (do not leave this on `main`) |
-| Node.js version | `22` |
-| Build command | `npm run build` |
-| Output directory | `build` |
-| Entry file | empty (this app is static `adapter-static`) |
-| Root directory | `/` |
-
-4. **Environment variables** (injected at build time):
-
-| Name | Value |
+| Secret | Value |
 |---|---|
 | `PUBLIC_SUPABASE_URL` | `https://miznzplwxqzhhokplgac.supabase.co` |
 | `PUBLIC_SUPABASE_ANON_KEY` | anon key (not the service role) |
-| `PUBLIC_SUPABASE_STORAGE_BUCKET` | `portfolio` |
+| `PUBLIC_SUPABASE_STORAGE_BUCKET` | optional, `portfolio` |
 
-5. Deploy. After that, every push to `production` rebuilds and publishes.
+2. Push `production`. The **Publish Hostinger branch** workflow builds the site and force-updates the `hostinger` branch with the contents of `build/`.
 
-Logs: website dashboard → **Deployments**.
+3. In hPanel: **Advanced → Git → Connect with GitHub**.
+4. Repository `deepbis94/portfolio-frontend`, **branch `hostinger`**, deploy directory `public_html`.
+5. First deploy needs an empty `public_html`. Click **Deploy**. Later pushes to `production` rebuild `hostinger`, and Hostinger auto-pulls it.
 
-Never put the service role key in Hostinger env or git.
+Never put the service role key in git or GitHub secrets.
