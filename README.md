@@ -26,43 +26,33 @@ npm run dev
 
 Operations use the `production` branch. Keep `main` for development.
 
-## Shared hosting (GitHub Actions → Hostinger FTP)
+## Hostinger auto-deploy (GitHub)
 
-Pushing to `production` builds the static site and uploads `build/` over FTP/FTPS. `main` does not deploy.
+Use **Node.js web app → Import Git repository**, not the generic Git file-copy tool. Generic Git only dumps source into a folder and will not run `npm run build`.
 
-1. In the GitHub repo: **Settings → Secrets and variables → Actions**.
-2. Add:
+1. hPanel → **Websites → Add Website → Node.js web app → Import Git repository**.
+2. Connect GitHub and select `deepbis94/portfolio-frontend`.
+3. Set:
 
-| Secret | Example |
+| Field | Value |
 |---|---|
-| `FTP_SERVER` | `ftp.yourdomain.com` (from Hostinger hPanel) |
-| `FTP_USERNAME` | hosting FTP user |
-| `FTP_PASSWORD` | hosting FTP password |
-| `FTP_SERVER_DIR` | `/public_html/` (must end with `/`) |
-| `FTP_PROTOCOL` | optional, `ftps` (default) or `ftp` |
+| Branch | `production` (do not leave this on `main`) |
+| Node.js version | `22` |
+| Build command | `npm run build` |
+| Output directory | `build` |
+| Entry file | empty (this app is static `adapter-static`) |
+| Root directory | `/` |
+
+4. **Environment variables** (injected at build time):
+
+| Name | Value |
+|---|---|
 | `PUBLIC_SUPABASE_URL` | `https://miznzplwxqzhhokplgac.supabase.co` |
 | `PUBLIC_SUPABASE_ANON_KEY` | anon key (not the service role) |
-| `PUBLIC_SUPABASE_STORAGE_BUCKET` | optional, defaults to `portfolio` |
+| `PUBLIC_SUPABASE_STORAGE_BUCKET` | `portfolio` |
 
-3. In Hostinger, the domain document root should be `public_html/`.
-4. After the first green run, `https://yourdomain.com` should load the site and `/admin/login` should show **Supabase connected**.
+5. Deploy. After that, every push to `production` rebuilds and publishes.
 
-Manual run: **Actions → Deploy site → Run workflow**. Enable dry run to list files without uploading.
+Logs: website dashboard → **Deployments**.
 
-Never put the service role key in GitHub or the frontend.
-
-## Shared hosting (manual)
-
-Set in `.env` **before** `npm run build`:
-
-```bash
-PUBLIC_SUPABASE_URL=https://miznzplwxqzhhokplgac.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=<anon key>
-PUBLIC_SUPABASE_STORAGE_BUCKET=portfolio
-```
-
-```bash
-npm run build
-```
-
-Upload the contents of `build/` into `public_html/`. Include `.htaccess` (copied from `static/.htaccess`) so `/admin` and `/projects` routes work.
+Never put the service role key in Hostinger env or git.
