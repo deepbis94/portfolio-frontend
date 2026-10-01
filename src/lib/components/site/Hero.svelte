@@ -3,9 +3,10 @@
   import HeroPhoto from '$lib/components/site/HeroPhoto.svelte';
   import Typewriter from '$lib/components/site/Typewriter.svelte';
   import type { Portfolio } from '$lib/data/content';
+  import { hireMailto } from '$lib/site';
 
   let { data, reduce = false }: { data: Portfolio; reduce?: boolean } = $props();
-  const hire = $derived(data.contactHref || '#contact');
+  const hire = $derived(data.contactHref || hireMailto(data.email));
 </script>
 
 <header class="hero py-[72px]" id="top">
@@ -17,7 +18,11 @@
         <i class="inline-block h-2 w-2 rounded-full bg-green not-italic"></i>{data.role} · {data.location}
       </span>
       <h1 class="max-w-[16ch] text-[clamp(34px,5.4vw,58px)] font-extrabold leading-[1.12] tracking-[-1.2px] max-md:mx-auto">
-        {data.headline} <span class="text-green">{data.headlineAccent}</span> {data.headlineSuffix}
+        {data.headline}{#if data.headlineAccent}
+          {' '}<span class="text-green">{data.headlineAccent}</span>
+        {/if}{#if data.headlineSuffix}
+          {' '}{data.headlineSuffix}
+        {/if}
       </h1>
       <p class="sub mt-5 max-w-[54ch] text-[17px] text-ink/80 max-md:mx-auto">
         {data.sub}
@@ -43,11 +48,11 @@
   </div>
   <dl class="mt-12 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5" aria-label="Career stats">
     {#each data.stats as stat}
-      <div class="rounded-xl border border-border bg-surface px-[18px] py-4">
+      <div class="rounded-xl border border-border bg-surface px-3 py-4 sm:px-[18px]">
         {#if stat.accent}
-          <dt class="font-mono text-lg font-bold tracking-tight text-green">{stat.accent}</dt>
+          <dt class="whitespace-nowrap font-mono text-base font-bold tracking-tight text-green sm:text-lg">{stat.accent}</dt>
         {/if}
-        <dd class="text-[13px] font-semibold {stat.accent ? 'mt-0.5 text-ink/80' : 'text-ink'}">{stat.label}</dd>
+        <dd class="break-words text-[12px] font-semibold sm:text-[13px] {stat.accent ? 'mt-0.5 text-ink/80' : 'text-ink'}">{stat.label}</dd>
       </div>
     {/each}
   </dl>

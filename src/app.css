@@ -74,6 +74,12 @@ button:focus-visible {
   padding: 0 28px;
 }
 
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 16px;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;

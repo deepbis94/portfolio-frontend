@@ -2,7 +2,7 @@
   let {
     left,
     right,
-    hireHref = '#contact',
+    hireHref = 'mailto:biswasd94@gmail.com?subject=Project%20inquiry',
     year = new Date().getFullYear()
   }: { left: string; right: string; hireHref?: string; year?: number } = $props();
 </script>

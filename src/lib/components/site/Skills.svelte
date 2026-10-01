@@ -22,7 +22,7 @@
     center
     eyebrow="My Toolbox"
     title="Skills & technologies I work with"
-    desc="Grouped by how often they show up in the work I ship — not by a fake percentage bar."
+    desc="Grouped by how central they are to the work I ship."
   />
   <div class="grid gap-10">
     {#each grouped as group, g}

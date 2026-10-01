@@ -16,6 +16,7 @@ jobs:
       PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
       PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
       PUBLIC_SUPABASE_STORAGE_BUCKET: ${{ secrets.PUBLIC_SUPABASE_STORAGE_BUCKET || 'portfolio' }}
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL || 'https://portfolio-new.creativeventure.space' }}
     steps:
       - uses: actions/checkout@v4
 

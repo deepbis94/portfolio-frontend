@@ -1,4 +1,10 @@
 import {
+  hireMailto,
+  fullStackAvailability,
+  photoChipLabel,
+  yearsChipLabel
+} from '$lib/site';
+import {
   CANONICAL_TITLE,
   defaultAvailability,
   defaultProcess,
@@ -118,15 +124,15 @@ export const portfolio: Portfolio = {
   github: 'https://github.com/deepbiswaslabs',
   photo: '/hero.jpg',
   photoAlt: `Deep Biswas — ${CANONICAL_TITLE}`,
-  photoChipOpen: 'Available',
-  photoChipYears: '6+ yrs shipping',
+  photoChipOpen: 'Full-stack · AI',
+  photoChipYears: '6+ yrs full-stack',
   metaTitle: `Deep Biswas — ${CANONICAL_TITLE}`,
   metaDescription:
     `Deep Biswas — ${CANONICAL_TITLE} in Kolkata. 6+ years building scalable APIs, eCommerce backends and cloud deployments with PHP, Laravel, Symfony and Node.js.`,
   footerLeft: `© {year} Deep Biswas · ${CANONICAL_TITLE}`,
   footerRight: 'Reference-based design · emerald green',
   headline: 'Building modern,',
-  headlineAccent: 'scalable backend systems',
+  headlineAccent: 'scalable web systems',
   headlineSuffix: 'that hold under real traffic.',
   sub: `${CANONICAL_TITLE} with 6+ years building SaaS, CRM, checkout, eCommerce, and AI-powered platforms using Laravel, Node.js, and cloud-native infrastructure.`,
   typePhrases: [
@@ -154,11 +160,11 @@ export const portfolio: Portfolio = {
     'Database & cloud — MySQL, Redis, Docker, AWS & GCP'
   ],
   availabilityLine: defaultAvailability,
-  contactHref: '#contact',
+  contactHref: hireMailto('biswasd94@gmail.com'),
   skills: [
     {
       title: 'PHP 8+ / Laravel',
-      body: 'Core backend — clean architecture, SOLID, queue workers, service layers.',
+      body: 'Core stack — clean architecture, SOLID, queue workers, service layers.',
       icon: 'code',
       group: 'core'
     },
@@ -317,7 +323,7 @@ export const portfolio: Portfolio = {
       when: 'June 2021 – Present',
       org: 'Codeclouds IT Solutions Pvt. Ltd. · Kolkata',
       bullets: [
-        'Owned backend delivery for SaaS, CRM and checkout products across eCommerce clients.',
+        'Owned full-stack delivery for SaaS, CRM and checkout products across eCommerce clients.',
         'Integrated Sticky.io, Konnektive & CheckoutChamp payment platforms for high-volume stores.',
         'Migrated legacy Symfony apps to PHP 8.3+; optimized queries and caching for performance.',
         'Managed AWS/GCP deployments, Docker environments and CI/CD — faster, reliable releases.',
@@ -415,7 +421,7 @@ export const portfolio: Portfolio = {
     {
       n: '04',
       title: 'End-to-End Ownership',
-      body: 'From API design to production support — one engineer accountable for the whole backend.'
+      body: 'From API design to production support — one engineer accountable for the whole system.'
     },
     {
       n: '05',
@@ -455,12 +461,21 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
   const legacySkillSet = incomingSkills.some((skill) =>
     /mysql & redis|vue\.js & react|cloud — aws/i.test(skill.title)
   );
-  const skills = incomingSkills.length > 0 && !legacySkillSet ? incomingSkills.map(withSkillGroup) : portfolio.skills;
+  const skills = (incomingSkills.length > 0 && !legacySkillSet ? incomingSkills.map(withSkillGroup) : portfolio.skills).map(
+    (skill) => ({ ...skill, body: unifyTitleCopy(skill.body) })
+  );
   const experience = (
     Array.isArray(rest.experience) ? (rest.experience as Portfolio['experience']) : portfolio.experience
   ).map((job) => {
     const normalized = normalizeWhen(job.when ?? '', Boolean(job.current));
-    return { ...job, bullets: job.bullets ?? [], when: normalized.when, current: normalized.current };
+    return {
+      ...job,
+      bullets: (job.bullets ?? []).map((bullet) =>
+        bullet.replace(/\bOwned backend delivery\b/g, 'Owned full-stack delivery')
+      ),
+      when: normalized.when,
+      current: normalized.current
+    };
   });
   const projects = (
     Array.isArray(rest.projects) ? (rest.projects as Portfolio['projects']) : portfolio.projects
@@ -490,8 +505,23 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
     sub: unifyTitleCopy((rest.sub as string) || portfolio.sub),
     aboutTitle: unifyTitleCopy((rest.aboutTitle as string) || portfolio.aboutTitle),
     aboutLead: unifyTitleCopy((rest.aboutLead as string) || portfolio.aboutLead),
-    availabilityLine: (rest.availabilityLine as string) || defaultAvailability,
-    contactHref: (rest.contactHref as string) || portfolio.contactHref,
+    headline: (rest.headline as string) || portfolio.headline,
+    headlineAccent: (() => {
+      const headline = String((rest.headline as string) || portfolio.headline);
+      const complete = headline.length > 40 && !/[,:—–-]\s*$/.test(headline);
+      if (complete) return '';
+      return unifyTitleCopy((rest.headlineAccent as string) || portfolio.headlineAccent);
+    })(),
+    headlineSuffix: (() => {
+      const headline = String((rest.headline as string) || portfolio.headline);
+      const complete = headline.length > 40 && !/[,:—–-]\s*$/.test(headline);
+      if (complete) return '';
+      return (rest.headlineSuffix as string) || portfolio.headlineSuffix;
+    })(),
+    photoChipOpen: photoChipLabel((rest.photoChipOpen as string) || portfolio.photoChipOpen),
+    photoChipYears: yearsChipLabel((rest.photoChipYears as string) || portfolio.photoChipYears),
+    availabilityLine: fullStackAvailability((rest.availabilityLine as string) || defaultAvailability),
+    contactHref: hireMailto((rest.email as string) || portfolio.email),
     nav: Array.isArray(rest.nav) ? (rest.nav as Portfolio['nav']) : portfolio.nav,
     pills: resolvedStats,
     stats: resolvedStats,
@@ -508,8 +538,16 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
     education: Array.isArray(rest.education) ? (rest.education as Portfolio['education']) : portfolio.education,
     certifications: Array.isArray(rest.certifications) ? (rest.certifications as string[]) : portfolio.certifications,
     services: Array.isArray(rest.services) ? (rest.services as Portfolio['services']) : portfolio.services,
-    why: Array.isArray(rest.why) ? (rest.why as Portfolio['why']) : portfolio.why,
-    channels: Array.isArray(rest.channels) ? (rest.channels as Portfolio['channels']) : portfolio.channels,
+    why: (Array.isArray(rest.why) ? (rest.why as Portfolio['why']) : portfolio.why).map((item) => ({
+      ...item,
+      body: item.body.replace(/\bthe whole backend\b/g, 'the whole system').replace(/\bwhole backend\b/g, 'whole system')
+    })),
+    channels: (Array.isArray(rest.channels) ? (rest.channels as Portfolio['channels']) : portfolio.channels).map(
+      (channel) =>
+        /^mailto:/i.test(channel.href) || channel.label.toLowerCase() === 'email'
+          ? { ...channel, href: hireMailto(channel.value.includes('@') ? channel.value : (rest.email as string) || portfolio.email) }
+          : channel
+    ),
     resumePdf: typeof rest.resumePdf === 'string' ? rest.resumePdf : portfolio.resumePdf,
     typePhrases: Array.isArray(rest.typePhrases) ? (rest.typePhrases as string[]) : portfolio.typePhrases,
     chipSkills: Array.isArray(rest.chipSkills) ? (rest.chipSkills as string[]) : portfolio.chipSkills

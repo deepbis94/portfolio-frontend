@@ -38,7 +38,7 @@
       class="rounded-3xl border border-border px-8 py-12"
       style="background: radial-gradient(ellipse 70% 90% at 50% -20%, rgba(185,243,50,0.14) 0%, transparent 60%), var(--color-surface);"
     >
-      <HireCta href={data.contactHref} note={data.availabilityLine} />
+      <HireCta href={data.contactHref} />
     </div>
   </section>
   <Process steps={data.process} />

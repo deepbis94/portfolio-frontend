@@ -14,7 +14,10 @@ export function unifyTitleCopy(text: string): string {
   return text
     .replace(/Senior Backend Engineer/g, CANONICAL_TITLE)
     .replace(/Senior Full-Stack Developer/g, CANONICAL_TITLE)
-    .replace(/Senior Fullstack Developer/gi, CANONICAL_TITLE);
+    .replace(/Senior Fullstack Developer/gi, CANONICAL_TITLE)
+    .replace(/\ba backend engineer\b/gi, 'a full-stack engineer')
+    .replace(/\bscalable backend systems\b/gi, 'scalable web systems')
+    .replace(/\bCore backend\b/gi, 'Core stack');
 }
 
 export function normalizeWhen(when: string, currentFlag = false): { when: string; current: boolean } {
@@ -79,7 +82,7 @@ export const defaultProcess: ProcessStep[] = [
 ];
 
 export const defaultAvailability =
-  'Available for freelance & full-time backend roles — usually replies within 24 hours.';
+  'Available for freelance & full-time full-stack roles — usually replies within 24 hours.';
 
 export const defaultProjectFacts: Record<string, string[]> = {
   supportmind: ['ReAct loop', 'Tool calling', 'Guardrails', 'Conversation audit trail'],

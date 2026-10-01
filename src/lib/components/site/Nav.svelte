@@ -2,7 +2,7 @@
   import { page } from '$app/state';
   import type { NavLink } from '$lib/data/content';
 
-  let { name, links, hireHref = '#contact' }: { name: string; links: NavLink[]; hireHref?: string } = $props();
+  let { name, links, hireHref = 'mailto:biswasd94@gmail.com?subject=Project%20inquiry' }: { name: string; links: NavLink[]; hireHref?: string } = $props();
 
   let open = $state(false);
   let active = $state('');

@@ -2,7 +2,7 @@
   import Button from '$lib/components/ui/Button.svelte';
 
   let {
-    href = '#contact',
+    href = 'mailto:biswasd94@gmail.com?subject=Project%20inquiry',
     note = '',
     compact = false
   }: { href?: string; note?: string; compact?: boolean } = $props();

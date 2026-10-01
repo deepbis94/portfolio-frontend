@@ -8,23 +8,37 @@
   import ProjectLoader from '$lib/components/site/ProjectLoader.svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import type { PageData } from './$types';
+  import { absoluteAssetUrl, publicSiteUrl } from '$lib/site';
 
   let { data }: { data: PageData } = $props();
   let chrome = $derived(data.chrome);
   let project = $derived(data.project);
   let loading = $derived(Boolean(navigating?.to?.params?.slug));
+  let origin = $derived(publicSiteUrl());
+  let pageUrl = $derived(`${origin}/projects/${data.slug}`);
+  let ogImage = $derived(absoluteAssetUrl(project?.image || chrome.photo));
+  let pageTitle = $derived(project ? `${project.name} — ${chrome.name}` : `Project — ${chrome.name}`);
+  let pageDesc = $derived(project?.description || project?.overview || chrome.metaDescription);
 </script>
 
 <svelte:head>
-  <title>{project ? `${project.name} — ${chrome.name}` : `Project — ${chrome.name}`}</title>
-  {#if project}
-    <meta name="description" content={project.description || project.overview} />
-  {/if}
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="canonical" href={pageUrl} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={pageUrl} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={pageDesc} />
+  <meta name="twitter:image" content={ogImage} />
 </svelte:head>
 
 <ProgressBar />
 <a class="skip-link" href="#main">Skip to content</a>
-<Nav name={chrome.name} links={chrome.nav} />
+<Nav name={chrome.name} links={chrome.nav} hireHref={chrome.contactHref} />
 
 <main class="wrap py-[72px]" id="main">
   {#if loading}
@@ -77,7 +91,7 @@
   {/if}
 
   {#if !loading}
-    <Footer left={chrome.footerLeft} right={chrome.footerRight} />
+    <Footer left={chrome.footerLeft} right={chrome.footerRight} hireHref={chrome.contactHref} />
   {/if}
 </main>
 
