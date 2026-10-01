@@ -1,0 +1,47 @@
+<svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MSTORE API code mockup">
+        <rect x="0" y="0" width="800" height="440" fill="#141016" />
+        <rect x="0" y="0" width="800" height="46" fill="#191521" />
+        <rect x="300" y="13" width="200" height="20" fill="#221d27" rx="10" />
+        <circle cx="24" cy="23" r="5" fill="#b9f332"/>
+        <text x="400" y="27" font-family="monospace" font-size="11" fill="#6b6370" text-anchor="middle">api.mstore.dev/v1/orders</text>
+        <rect x="18" y="74" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="101" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="128" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="155" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="182" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="209" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="236" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="263" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="290" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="317" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="344" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="371" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="18" y="398" width="14" height="8" fill="#3a3340" rx="2" />
+        <rect x="52" y="70" width="120" height="10" fill="#b9f332" rx="3" />
+        <rect x="190" y="70" width="46" height="10" fill="#4a4350" rx="3" />
+        <rect x="246" y="70" width="30" height="10" fill="#4a4350" rx="3" />
+        <rect x="52" y="97" width="160" height="10" fill="#8fb8d8" rx="3" />
+        <rect x="52" y="124" width="90" height="10" fill="#8a7f93" rx="3" />
+        <rect x="52" y="151" width="140" height="10" fill="#6b6370" rx="3" />
+        <rect x="210" y="151" width="46" height="10" fill="#4a4350" rx="3" />
+        <rect x="266" y="151" width="30" height="10" fill="#4a4350" rx="3" />
+        <rect x="52" y="178" width="180" height="10" fill="#b9f332" rx="3" />
+        <rect x="52" y="205" width="70" height="10" fill="#8a7f93" rx="3" />
+        <rect x="52" y="232" width="130" height="10" fill="#8fb8d8" rx="3" />
+        <rect x="200" y="232" width="46" height="10" fill="#4a4350" rx="3" />
+        <rect x="256" y="232" width="30" height="10" fill="#4a4350" rx="3" />
+        <rect x="52" y="259" width="60" height="10" fill="#6b6370" rx="3" />
+        <rect x="52" y="286" width="100" height="10" fill="#b9f332" rx="3" />
+        <rect x="52" y="313" width="150" height="10" fill="#8fb8d8" rx="3" />
+        <rect x="220" y="313" width="46" height="10" fill="#4a4350" rx="3" />
+        <rect x="276" y="313" width="30" height="10" fill="#4a4350" rx="3" />
+        <rect x="52" y="340" width="110" height="10" fill="#8a7f93" rx="3" />
+        <rect x="52" y="367" width="80" height="10" fill="#6b6370" rx="3" />
+        <rect x="52" y="394" width="140" height="10" fill="#b9f332" rx="3" />
+        <rect x="210" y="394" width="46" height="10" fill="#4a4350" rx="3" />
+        <rect x="266" y="394" width="30" height="10" fill="#4a4350" rx="3" />
+        <rect x="52" y="421" width="90" height="10" fill="#8fb8d8" rx="3" />
+        <rect x="620" y="64" width="140" height="28" fill="#343d0f" rx="14" stroke="#b9f332" stroke-opacity="0.5"/>
+        <text x="690" y="82" font-family="monospace" font-size="12" fill="#b9f332" text-anchor="middle">200 OK</text>
+        <text x="52" y="440-16" font-family="monospace" font-size="11" fill="#4a4350">GET / POST / PUT — RESTful · queue workers · PDF invoices</text>
+        </svg>
