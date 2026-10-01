@@ -128,7 +128,7 @@ export const portfolio: Portfolio = {
   photoChipYears: '6+ yrs full-stack',
   metaTitle: `Deep Biswas — ${CANONICAL_TITLE}`,
   metaDescription:
-    `Deep Biswas — ${CANONICAL_TITLE} in Kolkata. 6+ years building scalable APIs, eCommerce backends and cloud deployments with PHP, Laravel, Symfony and Node.js.`,
+    `Deep Biswas — ${CANONICAL_TITLE} in Kolkata. 6+ years building scalable APIs, eCommerce backends and AI-powered platforms (RAG, agents) with Laravel, Node.js and AWS/GCP.`,
   footerLeft: `© {year} Deep Biswas · ${CANONICAL_TITLE}`,
   footerRight: 'Reference-based design · emerald green',
   headline: 'Building modern,',
@@ -500,7 +500,13 @@ export function withDefaults(input: Partial<Portfolio> & Record<string, unknown>
     photo: (rest.photo as string) || portfolio.photo,
     photoAlt: unifyTitleCopy((rest.photoAlt as string) || portfolio.photoAlt),
     metaTitle: unifyTitleCopy((rest.metaTitle as string) || portfolio.metaTitle),
-    metaDescription: unifyTitleCopy((rest.metaDescription as string) || portfolio.metaDescription),
+    metaDescription: (() => {
+      const incoming = unifyTitleCopy((rest.metaDescription as string) || '');
+      if (incoming.trim() === '' || /cloud deployments with PHP, Laravel, Symfony and Node\.js/i.test(incoming)) {
+        return portfolio.metaDescription;
+      }
+      return incoming;
+    })(),
     footerLeft: unifyTitleCopy((rest.footerLeft as string) || portfolio.footerLeft),
     sub: unifyTitleCopy((rest.sub as string) || portfolio.sub),
     aboutTitle: unifyTitleCopy((rest.aboutTitle as string) || portfolio.aboutTitle),

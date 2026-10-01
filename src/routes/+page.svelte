@@ -7,7 +7,7 @@
   let live = $derived(data.portfolio);
   let origin = $derived(publicSiteUrl());
   let pageUrl = $derived(`${origin}/`);
-  let ogImage = $derived(absoluteAssetUrl(live.photo));
+    let ogImage = $derived(absoluteAssetUrl('/og.jpg'));
 </script>
 
 <svelte:head>
@@ -18,8 +18,10 @@
   <meta property="og:description" content={live.metaDescription} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={pageUrl} />
-  <meta property="og:image" content={ogImage} />
-  <meta property="og:image:alt" content={live.photoAlt} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={live.photoAlt} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={live.metaTitle} />
   <meta name="twitter:description" content={live.metaDescription} />
