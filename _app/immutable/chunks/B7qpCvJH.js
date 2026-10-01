@@ -1,0 +1,1 @@
+import{p as t,n as r}from"./CFv9M5DK.js";const n={get error(){return t.error},get status(){return t.status},get url(){return t.url}},e={get to(){return r.current?r.current.to:null}},g=n,s=e;export{s as n,g as p};
