@@ -6,4 +6,5 @@ node_modules
 .env
 .env.*
 !.env.example
+supabase/_backup_*.json
 vite.config.ts.timestamp-*
