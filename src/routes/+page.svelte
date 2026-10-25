@@ -1,10 +1,28 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import SitePage from '$lib/components/site/SitePage.svelte';
+  import { withDefaults, type Portfolio } from '$lib/data/content';
   import { absoluteAssetUrl, publicSiteUrl } from '$lib/site';
+  import { isSupabaseConfigured } from '$lib/supabase/client';
+  import { fetchPortfolio } from '$lib/supabase/portfolio';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
-  let live = $derived(data.portfolio);
+  let fresh = $state<Portfolio | null>(null);
+  let live = $derived(fresh ?? data.portfolio);
+
+  onMount(() => {
+    if (!isSupabaseConfigured()) return;
+    let active = true;
+    fetchPortfolio()
+      .then((payload) => {
+        if (active) fresh = withDefaults(payload);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  });
   let origin = $derived(publicSiteUrl());
   let pageUrl = $derived(`${origin}/`);
     let ogImage = $derived(absoluteAssetUrl('/og.jpg'));

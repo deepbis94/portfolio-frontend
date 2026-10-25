@@ -18,8 +18,11 @@ export type KitFetch = typeof fetch;
 
 function createClientWith(customFetch?: KitFetch): SupabaseClient {
   const browser = typeof window !== 'undefined';
+  const baseFetch: KitFetch = customFetch ?? fetch;
   return createClient(url, anon, {
-    ...(customFetch ? { global: { fetch: customFetch } } : {}),
+    global: {
+      fetch: (input, init) => baseFetch(input, { ...init, cache: 'no-store' })
+    },
     auth: {
       persistSession: browser,
       autoRefreshToken: browser,

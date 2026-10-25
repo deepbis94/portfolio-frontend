@@ -25,9 +25,7 @@ export function normalizeWhen(when: string, currentFlag = false): { when: string
     .replace(/\s*[·,]\s*(current|present)\s*$/i, '')
     .replace(/\s*\((current|present)\)\s*$/i, '')
     .trim();
-  const years = [...stripped.matchAll(/\b(19|20)\d{2}\b/g)].map((match) => Number(match[0]));
-  const endYear = years.at(-1) ?? 0;
-  const current = currentFlag || currentToken || (years.length >= 2 && endYear >= new Date().getFullYear());
+  const current = currentFlag || currentToken;
   if (!current) return { when: stripped, current: false };
   const start = stripped.split(/\s*[–—-]\s+/)[0]?.trim() || stripped;
   return { when: `${start} – Present`, current: true };
